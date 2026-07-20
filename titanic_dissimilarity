@@ -1,0 +1,41 @@
+import numpy as np
+from scipy.spatial.distance import euclidean
+
+# ==========================================
+# Nominal Attribute Similarity & Dissimilarity
+# Example: Sex and Embarked
+# Simple Matching
+# ==========================================
+sex = df['Sex']
+embarked = df['Embarked']
+count = 0
+total = 0
+for s, e in zip(sex, embarked):
+    if pd.isna(s) or pd.isna(e):
+        continue
+    total += 1
+    if s != e:
+        count += 1
+dissimilarity_nominal = count/total
+similarity_nominal = 1 - dissimilarity_nominal
+print("\nNominal Attribute Dissimilarity & Similarity")
+print("Sex vs Embarked - Dissimilarity =", dissimilarity_nominal)
+print("Sex vs Embarked - Similarity =", similarity_nominal)
+
+# ==========================================
+# Numeric Attribute Similarity & Dissimilarity
+# Example: Age and Fare
+# Euclidean Distance
+# ==========================================
+temp = df[['Age','Fare']].dropna()
+age = temp.iloc[0]['Age']
+fare = temp.iloc[0]['Fare']
+age2 = temp.iloc[1]['Age']
+fare2 = temp.iloc[1]['Fare']
+
+distance = np.sqrt((age-age2)**2 + (fare-fare2)**2)
+similarity_numeric = 1 / (1 + distance)
+
+print("\nNumeric Attribute Dissimilarity & Similarity")
+print("Age vs Fare - Euclidean Distance =", distance)
+print("Age vs Fare - Similarity =", similarity_numeric)
