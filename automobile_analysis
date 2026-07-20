@@ -1,0 +1,81 @@
+# ==========================================
+# Exploratory Data Analysis (EDA)
+# ==========================================
+sns.countplot(x='body-style', data=df)
+plt.title("Body Style Distribution")
+plt.show()
+
+sns.countplot(x='fuel-type', data=df)
+plt.title("Fuel Type Distribution")
+plt.show()
+
+sns.countplot(x='drive-wheels', data=df)
+plt.title("Drive Wheels Distribution")
+plt.show()
+
+plt.figure(figsize=(6,4))
+sns.histplot(df['horsepower'], bins=20, kde=True)
+plt.title("Horsepower Distribution")
+plt.show()
+
+plt.figure(figsize=(6,4))
+sns.histplot(df['price'], bins=20, kde=True)
+plt.title("Price Distribution")
+plt.show()
+
+plt.figure(figsize=(8,6))
+sns.heatmap(df.corr(numeric_only=True),
+            annot=True,
+            cmap='coolwarm')
+plt.title("Correlation Matrix")
+plt.show()
+
+# ==========================================
+# (b) Identify Attributes
+# ==========================================
+print("\nNumeric Attributes")
+numeric = df.select_dtypes(include=['int64','float64']).columns
+print(numeric)
+
+print("\nNominal Attributes")
+nominal = ['fuel-type','body-style']
+print(nominal)
+
+print("\nBinary Attributes")
+binary = ['fuel-type']
+print(binary)
+
+# ==========================================
+# (c) Dissimilarity for Nominal Attributes
+# Example:
+# fuel-type and body-style
+# Simple Matching Dissimilarity
+# ==========================================
+fuel = df['fuel-type']
+body = df['body-style']
+count = 0
+total = 0
+for f, b in zip(fuel, body):
+    if pd.isna(f) or pd.isna(b):
+        continue
+    total += 1
+    if f != b:
+        count += 1
+dissimilarity = count/total
+print("\nNominal Attribute Dissimilarity")
+print("Fuel-Type vs Body-Style =", dissimilarity)
+
+# ==========================================
+# (d) Numeric Attribute Dissimilarity
+# Example:
+# Horsepower and Price
+# Euclidean Distance
+# ==========================================
+temp = df[['horsepower','price']].dropna()
+hp = temp.iloc[0]['horsepower']
+price = temp.iloc[0]['price']
+hp2 = temp.iloc[1]['horsepower']
+price2 = temp.iloc[1]['price']
+distance = np.sqrt((hp-hp2)**2 + (price-price2)**2)
+print("\nEuclidean Distance")
+print(distance)
